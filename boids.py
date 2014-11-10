@@ -51,9 +51,8 @@ def update_boids(boid_data):
 		x_positions[i]=x_positions[i]+x_velocities[i]
 		y_positions[i]=y_positions[i]+y_velocities[i]
 
-
 figure=plt.figure()
-axes=plt.axes(xlim=(-500,1500), ylim=(-500,1500))
+axes=plt.axes(xlim=(config["plot_dimensions"]['x']), ylim=(config["plot_dimensions"]['y']))
 scatter=axes.scatter(boid_data[0],boid_data[1])
 
 def animate(frame):
@@ -62,7 +61,7 @@ def animate(frame):
 
 
 anim = animation.FuncAnimation(figure, animate,
-                               frames=50, interval=50)
+                               frames=config["animation"]['frames'], interval=config["animation"]['interval'])
 
 if __name__ == "__main__":
     plt.show()
