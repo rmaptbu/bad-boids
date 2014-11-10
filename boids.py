@@ -30,23 +30,23 @@ def update_boids(boid_data):
 	# Fly towards the middle
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
-			x_velocities[i]=x_velocities[i]+(x_positions[j]-x_positions[i])*config["flocking_coeff"]/len(x_positions)
-
-			y_velocities[i]=y_velocities[i]+(y_positions[j]-y_positions[i])*config["flocking_coeff"]/len(x_positions)
+			x_velocities[i]+=(x_positions[j]-x_positions[i])*config["flocking_coeff"]/len(x_positions)
+			y_velocities[i]+=(y_positions[j]-y_positions[i])*config["flocking_coeff"]/len(x_positions)
+			
 	# Fly away from nearby boids
-
 			if (x_positions[j]-x_positions[i])**2 + (y_positions[j]-y_positions[i])**2 < config["dispersion_distance"]:
-				x_velocities[i]=x_velocities[i]+(x_positions[i]-x_positions[j])
-				y_velocities[i]=y_velocities[i]+(y_positions[i]-y_positions[j])
+				x_velocities[i]+=x_positions[i]-x_positions[j]
+				y_velocities[i]+=y_positions[i]-y_positions[j]
+				
 	# Try to match speed with nearby boids
-
 			if (x_positions[j]-x_positions[i])**2 + (y_positions[j]-y_positions[i])**2 < config["match_speed_distance"]:
-				x_velocities[i]=x_velocities[i]+(x_velocities[j]-x_velocities[i])*config["match_speed_coeff"]/len(x_positions)
-				y_velocities[i]=y_velocities[i]+(y_velocities[j]-y_velocities[i])*config["match_speed_coeff"]/len(x_positions)
+				x_velocities[i]+=(x_velocities[j]-x_velocities[i])*config["match_speed_coeff"]/len(x_positions)
+				y_velocities[i]+=(y_velocities[j]-y_velocities[i])*config["match_speed_coeff"]/len(x_positions)
+				
 	# Move according to velocities
 	for i in range(len(x_positions)):
-		x_positions[i]=x_positions[i]+x_velocities[i]
-		y_positions[i]=y_positions[i]+y_velocities[i]
+		x_positions[i]+=x_velocities[i]
+		y_positions[i]+=y_velocities[i]
 
 figure=plt.figure()
 axes=plt.axes(xlim=(config["plot_dimensions"]['x']), ylim=(config["plot_dimensions"]['y']))
