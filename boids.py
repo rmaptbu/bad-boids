@@ -1,5 +1,5 @@
 """
-A deliberately bad implementation of [Boids](http://dl.acm.org/citation.cfm?doid=37401.37406)
+A better implementation of [Boids](http://dl.acm.org/citation.cfm?doid=37401.37406)
 for use as an exercise on refactoring.
 """
 import matplotlib
@@ -12,8 +12,7 @@ import yaml
 #import config file
 config=yaml.load(open("config.yml"))
 
-# Deliberately terrible code for teaching purposes
-
+#define initial conditions
 boid_x_positions=[]
 boid_y_positions=[]
 boid_x_velocities=[]
@@ -32,6 +31,7 @@ def update_boids(boid_data):
 
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
+			#define relevant variables
 			distance_x=x_positions[j]-x_positions[i]
 			distance_y=y_positions[j]-y_positions[i]
 			distance_total_sq=distance_x**2+distance_y**2
@@ -67,7 +67,8 @@ def animate(frame):
 
 
 anim = animation.FuncAnimation(figure, animate,
-                               frames=config["animation"]['frames'], interval=config["animation"]['interval'])
+                               frames=config["animation"]['frames'], 
+							   interval=config["animation"]['interval'])
 
 if __name__ == "__main__":
     plt.show()
