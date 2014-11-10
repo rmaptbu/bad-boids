@@ -7,8 +7,8 @@ y_velocity_range: [-20.0,20.0]
 
 #update boids
 flocking_coeff: 0.01
-dispersion_distance: 100
-match_speed_distance: 10000
+dispersion_threshold: 100
+match_speed_threshold: 10000
 match_speed_coeff: 0.125
 
 #plot boids
