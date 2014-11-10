@@ -30,16 +30,21 @@ def update_boids(boid_data):
 	# Fly towards the middle
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
-			x_velocities[i]+=(x_positions[j]-x_positions[i])*config["flocking_coeff"]/len(x_positions)
-			y_velocities[i]+=(y_positions[j]-y_positions[i])*config["flocking_coeff"]/len(x_positions)
+			distance_x=x_positions[j]-x_positions[i]
+			distance_y=y_positions[j]-y_positions[i]
+			distance_total_sq=distance_x**2+distance_y**2
+			
+			x_velocities[i]+=distance_x*config["flocking_coeff"]/len(x_positions)
+			y_velocities[i]+=distance_y*config["flocking_coeff"]/len(x_positions)
 			
 	# Fly away from nearby boids
-			if (x_positions[j]-x_positions[i])**2 + (y_positions[j]-y_positions[i])**2 < config["dispersion_distance"]:
+			
+			if distance_total_sq < config["dispersion_distance"]:
 				x_velocities[i]+=x_positions[i]-x_positions[j]
 				y_velocities[i]+=y_positions[i]-y_positions[j]
 				
 	# Try to match speed with nearby boids
-			if (x_positions[j]-x_positions[i])**2 + (y_positions[j]-y_positions[i])**2 < config["match_speed_distance"]:
+			if distance_total_sq < config["match_speed_distance"]:
 				x_velocities[i]+=(x_velocities[j]-x_velocities[i])*config["match_speed_coeff"]/len(x_positions)
 				y_velocities[i]+=(y_velocities[j]-y_velocities[i])*config["match_speed_coeff"]/len(x_positions)
 				
