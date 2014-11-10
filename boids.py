@@ -24,6 +24,8 @@ for i in range(config["boids_number"]):
 	boid_y_velocities.append(random.uniform(*config["y_velocity_range"]))
 boid_data=(boid_x_positions,boid_y_positions,boid_x_velocities,boid_y_velocities)
 
+test
+
 def update_boids(boid_data):
 	x_positions,y_positions,x_velocities,y_velocities=boid_data
 	flocking_coeff=config["flocking_coeff"]/config["boids_number"]
