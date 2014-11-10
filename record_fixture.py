@@ -1,9 +1,9 @@
 import yaml
 import boids
 from copy import deepcopy
-before=deepcopy(boids.boids)
-boids.update_boids(boids.boids)
-after=boids.boids
+before=deepcopy(boids.boid_data)
+boids.update_boids(boids.boid_data)
+after=boids.boid_data
 fixture={"before":before,"after":after}
 fixture_file=open("fixture.yml",'w')
 fixture_file.write(yaml.dump(fixture))
