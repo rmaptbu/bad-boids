@@ -7,40 +7,44 @@ matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import random
+import yaml
+
+#import config file
+config=yaml.load(open("config.yml"))
 
 # Deliberately terrible code for teaching purposes
 
-boid_x_positions=[random.uniform(-450,50.0) for x in range(50)]
-boid_y_positions=[random.uniform(300.0,600.0) for x in range(50)]
-boid_x_velocities=[random.uniform(0,10.0) for x in range(50)]
-boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(50)]
+boid_x_positions=[random.uniform(-450,50.0) for x in range(config["boids_number"])]
+boid_y_positions=[random.uniform(300.0,600.0) for x in range(config["boids_number"])]
+boid_x_velocities=[random.uniform(0,10.0) for x in range(config["boids_number"])]
+boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(config["boids_number"])]
 boid_data=(boid_x_positions,boid_y_positions,boid_x_velocities,boid_y_velocities)
 
 def update_boids(boid_data):
-	x_positions,y_positions,x_velocitiess,y_velocitiess=boid_data
+	x_positions,y_positions,x_velocities,y_velocities=boid_data
 	# Fly towards the middle
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
-			x_velocitiess[i]=x_velocitiess[i]+(x_positions[j]-x_positions[i])*0.01/len(x_positions)
+			x_velocities[i]=x_velocities[i]+(x_positions[j]-x_positions[i])*0.01/len(x_positions)
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
-			y_velocitiess[i]=y_velocitiess[i]+(y_positions[j]-y_positions[i])*0.01/len(x_positions)
+			y_velocities[i]=y_velocities[i]+(y_positions[j]-y_positions[i])*0.01/len(x_positions)
 	# Fly away from nearby boids
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
 			if (x_positions[j]-x_positions[i])**2 + (y_positions[j]-y_positions[i])**2 < 100:
-				x_velocitiess[i]=x_velocitiess[i]+(x_positions[i]-x_positions[j])
-				y_velocitiess[i]=y_velocitiess[i]+(y_positions[i]-y_positions[j])
+				x_velocities[i]=x_velocities[i]+(x_positions[i]-x_positions[j])
+				y_velocities[i]=y_velocities[i]+(y_positions[i]-y_positions[j])
 	# Try to match speed with nearby boids
 	for i in range(len(x_positions)):
 		for j in range(len(x_positions)):
 			if (x_positions[j]-x_positions[i])**2 + (y_positions[j]-y_positions[i])**2 < 10000:
-				x_velocitiess[i]=x_velocitiess[i]+(x_velocitiess[j]-x_velocitiess[i])*0.125/len(x_positions)
-				y_velocitiess[i]=y_velocitiess[i]+(y_velocitiess[j]-y_velocitiess[i])*0.125/len(x_positions)
+				x_velocities[i]=x_velocities[i]+(x_velocities[j]-x_velocities[i])*0.125/len(x_positions)
+				y_velocities[i]=y_velocities[i]+(y_velocities[j]-y_velocities[i])*0.125/len(x_positions)
 	# Move according to velocities
 	for i in range(len(x_positions)):
-		x_positions[i]=x_positions[i]+x_velocitiess[i]
-		y_positions[i]=y_positions[i]+y_velocitiess[i]
+		x_positions[i]=x_positions[i]+x_velocities[i]
+		y_positions[i]=y_positions[i]+y_velocities[i]
 
 
 figure=plt.figure()
