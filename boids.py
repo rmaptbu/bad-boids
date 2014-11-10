@@ -14,10 +14,15 @@ config=yaml.load(open("config.yml"))
 
 # Deliberately terrible code for teaching purposes
 
-boid_x_positions=[random.uniform(-450,50.0) for x in range(config["boids_number"])]
-boid_y_positions=[random.uniform(300.0,600.0) for x in range(config["boids_number"])]
-boid_x_velocities=[random.uniform(0,10.0) for x in range(config["boids_number"])]
-boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(config["boids_number"])]
+boid_x_positions=[]
+boid_y_positions=[]
+boid_x_velocities=[]
+boid_y_velocities=[]
+for i in range(config["boids_number"]):
+	boid_x_positions.append(random.uniform(*config["x_position_range"]))
+	boid_y_positions.append(random.uniform(*config["y_position_range"]))
+	boid_x_velocities.append(random.uniform(*config["x_velocity_range"]))
+	boid_y_velocities.append(random.uniform(*config["y_velocity_range"]))
 boid_data=(boid_x_positions,boid_y_positions,boid_x_velocities,boid_y_velocities)
 
 def update_boids(boid_data):
