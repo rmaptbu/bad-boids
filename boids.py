@@ -42,23 +42,20 @@ class Boid(object):
 
 class Boids(object):
 	#define initial conditions
-	def __init__(self):
-		pass
-
-	def initialise_random(self):
+	def __init__(self, data=0):
 		self.boids=[]
+		if data!=0:
+			xs,ys,xvs,yvs=data
 		for i in range(config["boids_number"]):
-			x=(random.uniform(*config["x_position_range"]))
-			y=(random.uniform(*config["y_position_range"]))
-			xv=(random.uniform(*config["x_velocity_range"]))
-			yv=(random.uniform(*config["y_velocity_range"]))
-			self.boids.append(Boid(x,y,xv,yv))
+			if data==0:
+				x=random.uniform(*config["x_position_range"])
+				y=random.uniform(*config["y_position_range"])
+				xv=random.uniform(*config["x_velocity_range"])
+				yv=random.uniform(*config["y_velocity_range"])
+				self.boids.append(Boid(x,y,xv,yv))
+			else:
+				self.boids.append(Boid(xs[i],ys[i],xvs[i],yvs[i]))
 
-	def initialise_from_data(self,data):
-		self.boids=[]
-		xs,ys,xvs,yvs=data
-		for i in range(config["boids_number"]):
-			self.boids.append(Boid(xs[i],ys[i],xvs[i],yvs[i]))
 
 	def update(self):
 		for boid in self.boids:
