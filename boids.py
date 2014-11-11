@@ -11,16 +11,39 @@ config=yaml.load(open("config.yml"))
 
 class Boid(object):
 	def __init__(self,x,y,xv,yv):
+		self.flocking_coeff=config["flocking_coeff"]/config["boids_number"]
+		self.match_speed_coeff=config["match_speed_coeff"]/config["boids_number"]
 		self.x_position=x
 		self.y_position=y
 		self.x_velocity=xv
 		self.y_velocity=yv
+	
+	def interaction(self,other):
+		#define relevant variables
+		distance_x=other.x_position-self.x_position
+		distance_y=other.y_position-self.y_position
+		distance_total_sq=distance_x**2+distance_y**2
+		speed_diff_x=other.x_velocity-self.x_velocity
+		speed_diff_y=other.y_velocity-self.y_velocity
+
+		# Fly towards the middle
+		self.x_velocity+=distance_x*self.flocking_coeff
+		self.y_velocity+=distance_y*self.flocking_coeff
+
+		# Fly away from nearby boids
+		if distance_total_sq < config["dispersion_threshold"]:
+			self.x_velocity-=distance_x
+			self.y_velocity-=distance_y
+
+		# Try to match speed with nearby boids
+		if distance_total_sq < config["match_speed_threshold"]:
+			self.x_velocity+=speed_diff_x*self.match_speed_coeff
+			self.y_velocity+=speed_diff_y*self.match_speed_coeff
 
 class Boids(object):
 	#define initial conditions
 	def __init__(self):
-		self.flocking_coeff=config["flocking_coeff"]/config["boids_number"]
-		self.match_speed_coeff=config["match_speed_coeff"]/config["boids_number"]
+		pass
 
 	def initialise_random(self):
 		self.boids=[]
@@ -40,29 +63,8 @@ class Boids(object):
 	def update(self):
 		for boid in self.boids:
 			for other in self.boids:
-				#define relevant variables
-				distance_x=other.x_position-boid.x_position
-				distance_y=other.y_position-boid.y_position
-				distance_total_sq=distance_x**2+distance_y**2
-				speed_diff_x=other.x_velocity-boid.x_velocity
-				speed_diff_y=other.y_velocity-boid.y_velocity
-
-				# Fly towards the middle
-				boid.x_velocity+=distance_x*self.flocking_coeff
-				boid.y_velocity+=distance_y*self.flocking_coeff
-
-				# Fly away from nearby boids
-				if distance_total_sq < config["dispersion_threshold"]:
-					boid.x_velocity-=distance_x
-					boid.y_velocity-=distance_y
-
-				# Try to match speed with nearby boids
-				if distance_total_sq < config["match_speed_threshold"]:
-					boid.x_velocity+=speed_diff_x*self.match_speed_coeff
-					boid.y_velocity+=speed_diff_y*self.match_speed_coeff
-
+				boid.interaction(other)
 		# Move according to velocities
-
 		for boid in self.boids:
 			boid.x_position+=boid.x_velocity
 			boid.y_position+=boid.y_velocity
