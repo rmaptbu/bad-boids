@@ -10,11 +10,3 @@ flocking_coeff: 0.01
 dispersion_threshold: 100
 match_speed_threshold: 10000
 match_speed_coeff: 0.125
-
-#plot boids
-plot_dimensions:
-    x: [-500, 1500]
-    y: [-500, 1500]
-animation:
-    frames: 50
-    interval: 50
