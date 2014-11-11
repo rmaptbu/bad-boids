@@ -24,36 +24,18 @@ class Boids(object):
 
 	def initialise_random(self):
 		self.boids=[]
-		self.x_positions=[]
-		self.y_positions=[]
-		self.x_velocities=[]
-		self.y_velocities=[]
 		for i in range(config["boids_number"]):
 			x=(random.uniform(*config["x_position_range"]))
 			y=(random.uniform(*config["y_position_range"]))
 			xv=(random.uniform(*config["x_velocity_range"]))
 			yv=(random.uniform(*config["y_velocity_range"]))
 			self.boids.append(Boid(x,y,xv,yv))
-		for boid in self.boids:
-			self.x_positions.append(boid.x_position)
-			self.y_positions.append(boid.y_position)
-			self.x_velocities.append(boid.x_velocity)
-			self.y_velocities.append(boid.y_velocity)
 
 	def initialise_from_data(self,data):
 		self.boids=[]
-		self.x_positions=[]
-		self.y_positions=[]
-		self.x_velocities=[]
-		self.y_velocities=[]
 		xs,ys,xvs,yvs=data
 		for i in range(config["boids_number"]):
 			self.boids.append(Boid(xs[i],ys[i],xvs[i],yvs[i]))
-		for boid in self.boids:
-			self.x_positions.append(boid.x_position)
-			self.y_positions.append(boid.y_position)
-			self.x_velocities.append(boid.x_velocity)
-			self.y_velocities.append(boid.y_velocity)
 
 	def update(self):
 		for boid in self.boids:
@@ -80,15 +62,19 @@ class Boids(object):
 					boid.y_velocity+=speed_diff_y*self.match_speed_coeff
 
 		# Move according to velocities
+
+		for boid in self.boids:
+			boid.x_position+=boid.x_velocity
+			boid.y_position+=boid.y_velocity
+	
+	def update_output(self):
 		self.x_positions=[]
 		self.y_positions=[]
 		self.x_velocities=[]
 		self.y_velocities=[]
 		for boid in self.boids:
-			boid.x_position+=boid.x_velocity
-			boid.y_position+=boid.y_velocity
-			#update output parameters
 			self.x_positions.append(boid.x_position)
 			self.y_positions.append(boid.y_position)
 			self.x_velocities.append(boid.x_velocity)
 			self.y_velocities.append(boid.y_velocity)
+		

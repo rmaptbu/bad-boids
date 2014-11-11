@@ -8,6 +8,7 @@ def test_bad_boids_regression():
 	boids=Boids()
 	boids.initialise_from_data(regression_data["before"])
 	boids.update()
+	boids.update_output()
 	boid_data=boids.x_positions, boids.y_positions, boids.x_velocities, boids.y_velocities
 	for after,before in zip(regression_data["after"],boid_data):
 		for after_value,before_value in zip(after,before): 
