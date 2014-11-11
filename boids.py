@@ -22,6 +22,10 @@ class Boid(object):
 class Boids(object):
 	#define initial conditions
 	def __init__(self):
+		self.flocking_coeff=config["flocking_coeff"]/config["boids_number"]
+		self.match_speed_coeff=config["match_speed_coeff"]/config["boids_number"]
+	
+	def initialise_random(self):
 		self.boids=[]
 		self.x_positions=[]
 		self.y_positions=[]
@@ -38,8 +42,21 @@ class Boids(object):
 			self.y_positions.append(boid.y_position)
 			self.x_velocities.append(boid.x_velocity)
 			self.y_velocities.append(boid.y_velocity)
-		self.flocking_coeff=config["flocking_coeff"]/config["boids_number"]
-		self.match_speed_coeff=config["match_speed_coeff"]/config["boids_number"]
+	
+	def initialise_from_data(self,data):
+		self.boids=[]
+		self.x_positions=[]
+		self.y_positions=[]
+		self.x_velocities=[]
+		self.y_velocities=[]
+		xs,ys,xvs,yvs=data
+		for i in range(config["boids_number"]):
+			self.boids.append(Boid(xs[i],ys[i],xvs[i],yvs[i]))
+		for boid in self.boids:
+			self.x_positions.append(boid.x_position)
+			self.y_positions.append(boid.y_position)
+			self.x_velocities.append(boid.x_velocity)
+			self.y_velocities.append(boid.y_velocity)			
 
 	def update(self):
 		for i in range(len(self.x_positions)):
@@ -71,6 +88,11 @@ class Boids(object):
 			self.y_positions[i]+=self.y_velocities[i]
 
 boids=Boids()
+if __name__=="__main__":
+	boids.initialise_random()
+else:
+	regression_data=yaml.load(open('fixture.yml'))
+	boids.initialise_from_data(regression_data["before"])
 figure=plt.figure()
 axes=plt.axes(xlim=(config["plot_dimensions"]['x']), ylim=(config["plot_dimensions"]['y']))
 scatter=axes.scatter(boids.x_positions,boids.y_positions)
