@@ -12,22 +12,32 @@ import yaml
 #import config file
 config=yaml.load(open("config.yml"))
 
+class Boid(object):
+	def __init__(self,x,y,xv,yv):
+		self.x_position=x
+		self.y_position=y
+		self.x_velocity=xv
+		self.y_velocity=yv
+		
 class Boids(object):
 	#define initial conditions
 	def __init__(self):
-		boid_x_positions=[]
-		boid_y_positions=[]
-		boid_x_velocities=[]
-		boid_y_velocities=[]
+		self.boids=[]
+		self.x_positions=[]
+		self.y_positions=[]
+		self.x_velocities=[]
+		self.y_velocities=[]
 		for i in range(config["boids_number"]):
-			boid_x_positions.append(random.uniform(*config["x_position_range"]))
-			boid_y_positions.append(random.uniform(*config["y_position_range"]))
-			boid_x_velocities.append(random.uniform(*config["x_velocity_range"]))
-			boid_y_velocities.append(random.uniform(*config["y_velocity_range"]))
-		self.x_positions=boid_x_positions
-		self.y_positions=boid_y_positions
-		self.x_velocities=boid_x_velocities
-		self.y_velocities=boid_y_velocities
+			x=(random.uniform(*config["x_position_range"]))
+			y=(random.uniform(*config["y_position_range"]))
+			xv=(random.uniform(*config["x_velocity_range"]))
+			yv=(random.uniform(*config["y_velocity_range"]))
+			self.boids.append(Boid(x,y,xv,yv))
+		for boid in self.boids:
+			self.x_positions.append(boid.x_position)
+			self.y_positions.append(boid.y_position)
+			self.x_velocities.append(boid.x_velocity)
+			self.y_velocities.append(boid.y_velocity)
 		self.flocking_coeff=config["flocking_coeff"]/config["boids_number"]
 		self.match_speed_coeff=config["match_speed_coeff"]/config["boids_number"]
 
