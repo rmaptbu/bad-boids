@@ -6,8 +6,6 @@ for use as an exercise on refactoring.
 import random
 from numpy import array
 
-# Will now add an Eagle to Boids
-
 class Boid(object):
 	def __init__(self,x,y,xv,yv,owner,species="Starling"):
 		self.position=array([x,y])
