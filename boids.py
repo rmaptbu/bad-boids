@@ -16,48 +16,42 @@ class Boid(object):
         self.species=species
 
     def interaction(self,other):
-        delta_v=array([0.0,0.0])
-        separation=other.position-self.position
-        separation_sq=separation.dot(separation)
+        self.delta_v=array([0.0,0.0])
+        self.separation=other.position-self.position
+        self.separation_sq=self.separation.dot(self.separation)
  
 
 class Eagle(Boid):
     def __init__(self,x,y,xv,yv,owner):
         super(Eagle,self).__init__(x,y,xv,yv,owner,species="Eagle")
     def interaction(self,other):
-        #super(Eagle,self).interaction(other)
-        delta_v=array([0.0,0.0])
-        separation=other.position-self.position
-        separation_sq=separation.dot(separation)
-        delta_v+=separation*self.owner.eagle_hunt_strength
-        return delta_v
+        super(Eagle,self).interaction(other)
+        self.delta_v+=self.separation*self.owner.eagle_hunt_strength
+        return self.delta_v
         
 class Starling(Boid):
     def __init__(self,x,y,xv,yv,owner):
         super(Starling,self).__init__(x,y,xv,yv,owner,species="Starling")
     def interaction(self,other):
-        #super(Starling,self).interaction(other)
-        delta_v=array([0.0,0.0])
-        separation=other.position-self.position
-        separation_sq=separation.dot(separation)
+        super(Starling,self).interaction(other)
         if other.species=="Eagle":
             # Flee the Eagle
-            if separation_sq < self.owner.eagle_avoidance_radius**2:
-                delta_v-=(separation*self.owner.eagle_fear)/separation.dot(separation)
-                return delta_v
+            if self.separation_sq < self.owner.eagle_avoidance_radius**2:
+                self.delta_v-=(self.separation*self.owner.eagle_fear)/self.separation.dot(self.separation)
+                return self.delta_v
 
         else:
             # Fly towards the middle
-            delta_v+=separation*self.owner.flock_attraction
+            self.delta_v+=self.separation*self.owner.flock_attraction
             
             # Fly away from nearby boids
-            if separation_sq < self.owner.avoidance_radius**2:
-                delta_v-=separation
+            if self.separation_sq < self.owner.avoidance_radius**2:
+                self.delta_v-=self.separation
 
             # Try to match speed with nearby boids
-            if separation_sq < self.owner.formation_flying_radius**2:
-                delta_v+=(other.velocity-self.velocity)*self.owner.speed_matching_strength
-        return delta_v
+            if self.separation_sq < self.owner.formation_flying_radius**2:
+                self.delta_v+=(other.velocity-self.velocity)*self.owner.speed_matching_strength
+        return self.delta_v
         
 # Deliberately terrible code for teaching purposes
 class Boids(object):
