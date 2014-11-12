@@ -20,15 +20,32 @@ class Boid(object):
         separation=other.position-self.position
         separation_sq=separation.dot(separation)
  
+
+class Eagle(Boid):
+    def __init__(self,x,y,xv,yv,owner):
+        super(Eagle,self).__init__(x,y,xv,yv,owner,species="Eagle")
+    def interaction(self,other):
+        #super(Eagle,self).interaction(other)
+        delta_v=array([0.0,0.0])
+        separation=other.position-self.position
+        separation_sq=separation.dot(separation)
+        delta_v+=separation*self.owner.eagle_hunt_strength
+        return delta_v
+        
+class Starling(Boid):
+    def __init__(self,x,y,xv,yv,owner):
+        super(Starling,self).__init__(x,y,xv,yv,owner,species="Starling")
+    def interaction(self,other):
+        #super(Starling,self).interaction(other)
+        delta_v=array([0.0,0.0])
+        separation=other.position-self.position
+        separation_sq=separation.dot(separation)
         if other.species=="Eagle":
             # Flee the Eagle
             if separation_sq < self.owner.eagle_avoidance_radius**2:
                 delta_v-=(separation*self.owner.eagle_fear)/separation.dot(separation)
                 return delta_v
 
-        if self.species=="Eagle":
-            # Hunt the boids
-            delta_v+=separation*self.owner.eagle_hunt_strength
         else:
             # Fly towards the middle
             delta_v+=separation*self.owner.flock_attraction
@@ -40,21 +57,8 @@ class Boid(object):
             # Try to match speed with nearby boids
             if separation_sq < self.owner.formation_flying_radius**2:
                 delta_v+=(other.velocity-self.velocity)*self.owner.speed_matching_strength
-
         return delta_v
-
-class Eagle(Boid):
-    def __init__(self,x,y,xv,yv,owner):
-        super(Eagle,self).__init__(x,y,xv,yv,owner,species="Eagle")
-    def interaction(self,other):
-        return super(Eagle,self).interaction(other)
-		
-class Starling(Boid):
-    def __init__(self,x,y,xv,yv,owner):
-        super(Starling,self).__init__(x,y,xv,yv,owner,species="Starling")
-    def interaction(self,other):
-        return super(Starling,self).interaction(other)
-
+        
 # Deliberately terrible code for teaching purposes
 class Boids(object):
     def __init__(self,
