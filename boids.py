@@ -52,10 +52,19 @@ class Starling(Boid):
 		return self.delta_v
 
 class BoidBuilder(object):
+	def __init__(self):
+		self.random_x_range=[-450,50.0]
+		self.random_y_range=[300.0,600.0]
+		self.random_xv_range=[0,10.0]
+		self.random_yv_range=[-20.0,20.0]
 	def add_random_starling(self,owner):
 		starling=Starling(0,0,0,0, owner)
-		starling.position=array([random.uniform(-450,50.0),random.uniform(300.0,600.0)])
-		starling.velocity=array([random.uniform(0,10.0),random.uniform(-20.0,20.0)])
+		x=random.uniform(*self.random_x_range)
+		y=random.uniform(*self.random_y_range)
+		xv=random.uniform(*self.random_xv_range)
+		yv=random.uniform(*self.random_yv_range)
+		starling.position=array([x,y])
+		starling.velocity=array([xv,yv])
 		return starling
 	def add_starling(self,owner,coords):
 		x,y,xv,yv = coords
