@@ -57,7 +57,8 @@ class BoidBuilder(object):
 		starling.position=array([random.uniform(-450,50.0),random.uniform(300.0,600.0)])
 		starling.velocity=array([random.uniform(0,10.0),random.uniform(-20.0,20.0)])
 		return starling
-	def add_starling(self,x,y,xv,yv,owner):
+	def add_starling(self,owner,coords):
+		x,y,xv,yv = coords
 		return Starling(x,y,xv,yv,owner)
 	def add_eagle(self,x,y,xv,yv,owner):
 		return Eagle(x,y,xv,yv,owner)
@@ -84,7 +85,7 @@ class Boids(object):
 		self.boids.append(self.bb.add_eagle(x,y,xv,yv,self))
 
 	def initialise_from_data(self,data):
-		self.boids=[Starling(x,y,xv,yv,self) for x,y,xv,yv in zip(*data)]
+		self.boids=[self.bb.add_starling(self, coords) for coords in zip(*data)]
 
 	def update(self):
 		for me in self.boids:
