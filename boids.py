@@ -19,7 +19,6 @@ class Boid(object):
         self.delta_v=array([0.0,0.0])
         self.separation=other.position-self.position
         self.separation_sq=self.separation.dot(self.separation)
- 
 
 class Eagle(Boid):
     def __init__(self,x,y,xv,yv,owner):
@@ -28,7 +27,7 @@ class Eagle(Boid):
         super(Eagle,self).interaction(other)
         self.delta_v+=self.separation*self.owner.eagle_hunt_strength
         return self.delta_v
-        
+
 class Starling(Boid):
     def __init__(self,x,y,xv,yv,owner):
         super(Starling,self).__init__(x,y,xv,yv,owner,species="Starling")
@@ -39,11 +38,10 @@ class Starling(Boid):
             if self.separation_sq < self.owner.eagle_avoidance_radius**2:
                 self.delta_v-=(self.separation*self.owner.eagle_fear)/self.separation.dot(self.separation)
                 return self.delta_v
-
         else:
             # Fly towards the middle
             self.delta_v+=self.separation*self.owner.flock_attraction
-            
+
             # Fly away from nearby boids
             if self.separation_sq < self.owner.avoidance_radius**2:
                 self.delta_v-=self.separation
@@ -52,8 +50,13 @@ class Starling(Boid):
             if self.separation_sq < self.owner.formation_flying_radius**2:
                 self.delta_v+=(other.velocity-self.velocity)*self.owner.speed_matching_strength
         return self.delta_v
+
+class BoidBuilder(object):
+    def add_starling(self,x,y,xv,yv,owner):
+        return Starling(x,y,xv,yv,owner)
+    def add_eagle(self,x,y,xv,yv,owner):
+        return Eagle(x,y,xv,yv,owner)
         
-# Deliberately terrible code for teaching purposes
 class Boids(object):
     def __init__(self,
            flock_attraction,avoidance_radius,
@@ -66,16 +69,17 @@ class Boids(object):
         self.eagle_avoidance_radius=eagle_avoidance_radius
         self.eagle_fear=eagle_fear
         self.eagle_hunt_strength=eagle_hunt_strength
+        self.bb=BoidBuilder()		
 
-
+    
     def initialise_random(self,count):
-        self.boids=[Starling(random.uniform(-450,50.0),
+        self.boids=[self.bb.add_starling(random.uniform(-450,50.0),
                 random.uniform(300.0,600.0),
                 random.uniform(0,10.0),
                 random.uniform(-20.0,20.0),self) for i in range(count)]
 
     def add_eagle(self,x,y,xv,yv):
-        self.boids.append(Eagle(x,y,xv,yv,self))
+        self.boids.append(self.bb.add_eagle(x,y,xv,yv,self))
 
     def initialise_from_data(self,data):
         self.boids=[Starling(x,y,xv,yv,self) for x,y,xv,yv in zip(*data)]
@@ -89,5 +93,3 @@ class Boids(object):
             me.velocity+=delta_v
             # Move according to velocities
             me.position+=me.velocity
-
-
