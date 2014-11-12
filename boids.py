@@ -43,6 +43,11 @@ class Boid(object):
 
         return delta_v
 
+class Eagle(Boid):
+    def __init__(self,x,y,xv,yv,owner):
+        super(Eagle,self).__init__(x,y,xv,yv,owner,species="Eagle")
+    def interaction(self,other):
+        return super(Eagle,self).interaction(other)
 
 # Deliberately terrible code for teaching purposes
 class Boids(object):
@@ -66,7 +71,7 @@ class Boids(object):
                 random.uniform(-20.0,20.0),self) for i in range(count)]
 
     def add_eagle(self,x,y,xv,yv):
-        self.boids.append(Boid(x,y,xv,yv,self,species="Eagle"))
+        self.boids.append(Eagle(x,y,xv,yv,self))
 
     def initialise_from_data(self,data):
         self.boids=[Boid(x,y,xv,yv,self) for x,y,xv,yv in zip(*data)]
