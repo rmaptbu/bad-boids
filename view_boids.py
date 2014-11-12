@@ -22,7 +22,7 @@ trace_x=[]
 trace_y=[]
 trace_x.append(mean([b.position[0] for b in boids.boids]))
 trace_y.append(mean([b.position[1] for b in boids.boids]))
-scatter2=axes.scatter(trace_x,trace_y)
+line=axes.plot(trace_x,trace_y)
 
 def color(boid):
 	if boid.species=="Eagle":
@@ -35,7 +35,7 @@ def animate(frame):
 	scatter.set_color([color(b) for b in boids.boids])
 	trace_x.append(mean([b.position[0] for b in boids.boids]))
 	trace_y.append(mean([b.position[1] for b in boids.boids]))
-	scatter2=axes.scatter(trace_x,trace_y)
+	line=axes.plot(trace_x,trace_y)
 
 
 anim = animation.FuncAnimation(figure, animate,
