@@ -1,5 +1,6 @@
 import boids as bd
 import object_boids as obd
+import numpy_boids as nbd
 import time
 
 def time_bad_boids():
@@ -26,4 +27,13 @@ def time_object_boids():
 	#duration of update boids averaged 1000 times in micro seconds
 	return (end_time-start_time)*10
 
-print time_bad_boids(), time_object_boids()
+def time_numpy_boids():
+	boids=nbd.init_boids()
+	start_time=time.clock()
+	for x in xrange(100):
+		nbd.update_boids(boids)
+	end_time=time.clock()
+	#duration of update boids averaged 1000 times in micro seconds
+	return (end_time-start_time)*10
+	
+print time_numpy_boids()

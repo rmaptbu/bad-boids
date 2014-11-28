@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 from matplotlib import animation
-import boids as bd
+import numpy_boids as bd
 
 boids=bd.init_boids()
 

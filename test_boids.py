@@ -1,4 +1,4 @@
-from boids import update_boids
+from numpy_boids import update_boids
 from nose.tools import assert_almost_equal
 import os
 import yaml
