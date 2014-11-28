@@ -1,9 +1,10 @@
 import yaml
-import boids
+import numpy_boids as bd
 from copy import deepcopy
-before=deepcopy(boids.boids)
-boids.update_boids(boids.boids)
-after=boids.boids
+boids=bd.init_boids()
+before=boids.tolist()
+bd.update_boids(boids)
+after=boids.tolist()
 fixture={"before":before,"after":after}
 fixture_file=open("fixture.yml",'w')
 fixture_file.write(yaml.dump(fixture))

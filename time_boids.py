@@ -36,4 +36,4 @@ def time_numpy_boids():
 	#duration of update boids averaged 1000 times in micro seconds
 	return (end_time-start_time)*10
 	
-print 'numpy:', time_numpy_boids(), 'object:', time_object_boids(), 'original:', time_bad_boids()
+print 'numpy:', time_numpy_boids(), 'original:', time_bad_boids()
