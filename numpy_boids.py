@@ -18,7 +18,6 @@ def update_boids(boids):
 	positions=boids[:2].transpose()
 	velocities=boids[2:].transpose()
 	
-	xs,ys,xvs,yvs=boids
 	# Fly towards the middle
 	for i in range(len(positions)):
 		velocities+=(positions[i]-positions)*0.01/len(positions)
@@ -35,8 +34,3 @@ def update_boids(boids):
 				
 	# Move according to velocities
 	positions+=velocities
-		
-	xs=positions[:,0]
-	ys=positions[:,1]
-	xvs=velocities[:,0]
-	yvs=velocities[:,1]
