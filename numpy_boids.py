@@ -22,26 +22,21 @@ def update_boids(boids):
 	# Fly towards the middle
 	for i in range(len(positions)):
 		velocities+=(positions[i]-positions)*0.01/len(positions)
-
-		
+	
 	# Fly away from nearby boids	
 	for i in range(len(positions)):
 		nearby_push = ((positions[i]-positions)**2).sum(axis=1)<100
 		velocities[nearby_push]+=positions[nearby_push]-positions[i]
-
 	
 	# Try to match speed with nearby boids
 	for i in range(len(positions)):
 		nearby_pull=((positions[i]-positions)**2).sum(axis=1)<10000
 		velocities[nearby_pull]+=(velocities[i]-velocities[nearby_pull])*0.125/len(positions)
+				
+	# Move according to velocities
+	positions+=velocities
 		
 	xs=positions[:,0]
 	ys=positions[:,1]
 	xvs=velocities[:,0]
 	yvs=velocities[:,1]
-
-				
-	# Move according to velocities
-	for i in range(len(xs)):
-		xs[i]=xs[i]+xvs[i]
-		ys[i]=ys[i]+yvs[i]
