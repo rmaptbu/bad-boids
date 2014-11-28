@@ -3,7 +3,6 @@ A deliberately bad implementation of [Boids](http://dl.acm.org/citation.cfm?doid
 for use as an exercise on refactoring.
 """
 import random
-
 # Deliberately terrible code for teaching purposes
 
 def init_boids():
