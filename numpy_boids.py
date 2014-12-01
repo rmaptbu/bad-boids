@@ -31,7 +31,7 @@ def update_boids(boids):
 	nearby_push = np.sum((pos_diff**2),axis=0,keepdims=True)<100
 	pos_diff_masked=np.zeros((2,50,50))
 	pos_diff_masked[np.tile(nearby_push,(2,1,1))]+=pos_diff[np.tile(nearby_push,(2,1,1))]
-	velocities+=pos_diff_masked.sum(axis=1).T
+	velocities+=pos_diff_masked.sum(axis=2).T
 	
 	# Try to match speed with nearby boids
 	nearby_pull = np.sum((pos_diff**2),axis=0,keepdims=True)<10000
