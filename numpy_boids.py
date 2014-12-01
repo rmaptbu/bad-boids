@@ -17,8 +17,8 @@ def init_boids():
 def update_boids(boids):
 	pos_diff=-np.subtract.outer(boids[:2],boids[:2]).diagonal(axis1=0,axis2=2).T
 	vel_diff=-np.subtract.outer(boids[2:],boids[2:]).diagonal(axis1=0,axis2=2).T
-	positions=boids[:2].transpose()
-	velocities=boids[2:].transpose()
+	positions=boids[:2].T
+	velocities=boids[2:].T
 	
 	# Fly towards the middle	
 	velocities+=pos_diff.sum(axis=1).T*0.01/len(positions)
