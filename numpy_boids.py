@@ -15,23 +15,26 @@ def init_boids():
 	return boids
 
 def update_boids(boids):
-	diff_pos_x=np.subtract.outer(boids[0],boids[0])
-	diff_pos_y=np.subtract.outer(boids[1],boids[1])
-	diff_vel_x=np.subtract.outer(boids[2],boids[2])
-	diff_vel_y=np.subtract.outer(boids[3],boids[3])
-	diff_pos=np.array([diff_pos_x,diff_pos_y])
-	diff_vel=np.array([diff_vel_x,diff_vel_y])
+	pos_diff_x=np.subtract.outer(boids[0],boids[0])
+	pos_diff_y=np.subtract.outer(boids[1],boids[1])
+	vel_diff_x=np.subtract.outer(boids[2],boids[2])
+	vel_diff_y=np.subtract.outer(boids[3],boids[3])
+	pos_diff=np.array([pos_diff_x,pos_diff_y])
+	vel_diff=np.array([vel_diff_x,vel_diff_y])
 	positions=boids[:2].transpose()
 	velocities=boids[2:].transpose()
 	
 	# Fly towards the middle	
-	velocities+=diff_pos.sum(axis=1).T*0.01/len(positions)
+	velocities+=pos_diff.sum(axis=1).T*0.01/len(positions)
 	
+	# Fly away from nearby boids	
+	nearby_push = np.sum((pos_diff**2),axis=0,keepdims=True)<100
+	pos_diff_masked=np.zeros((2,50,50))
+	pos_diff_masked[np.tile(nearby_push,(2,1,1))]+=pos_diff[np.tile(nearby_push,(2,1,1))]
+	velocities+=pos_diff_masked.sum(axis=1).T
+		
 	for i in range(len(positions)):		
 		
-		# Fly away from nearby boids	
-		nearby_push = ((positions[i]-positions)**2).sum(axis=1)<100
-		velocities[nearby_push]+=positions[nearby_push]-positions[i]
 	
 		# Try to match speed with nearby boids
 		nearby_pull=((positions[i]-positions)**2).sum(axis=1)<10000
