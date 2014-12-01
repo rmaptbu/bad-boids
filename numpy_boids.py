@@ -15,12 +15,8 @@ def init_boids():
 	return boids
 
 def update_boids(boids):
-	pos_diff_x=np.subtract.outer(boids[0],boids[0])
-	pos_diff_y=np.subtract.outer(boids[1],boids[1])
-	vel_diff_x=np.subtract.outer(boids[2],boids[2])
-	vel_diff_y=np.subtract.outer(boids[3],boids[3])
-	pos_diff=np.array([pos_diff_x,pos_diff_y])
-	vel_diff=np.array([vel_diff_x,vel_diff_y])
+	pos_diff=-np.subtract.outer(boids[:2],boids[:2]).diagonal(axis1=0,axis2=2).T
+	vel_diff=-np.subtract.outer(boids[2:],boids[2:]).diagonal(axis1=0,axis2=2).T
 	positions=boids[:2].transpose()
 	velocities=boids[2:].transpose()
 	
