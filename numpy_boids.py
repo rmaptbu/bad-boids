@@ -15,12 +15,19 @@ def init_boids():
 	return boids
 
 def update_boids(boids):
+	diff_pos_x=np.subtract.outer(boids[0],boids[0])
+	diff_pos_y=np.subtract.outer(boids[1],boids[1])
+	diff_vel_x=np.subtract.outer(boids[2],boids[2])
+	diff_vel_y=np.subtract.outer(boids[3],boids[3])
+	diff_pos=np.array([diff_pos_x,diff_pos_y])
+	diff_vel=np.array([diff_vel_x,diff_vel_y])
 	positions=boids[:2].transpose()
 	velocities=boids[2:].transpose()
 	
-	for i in range(len(positions)):
-		# Fly towards the middle	
-		velocities+=(positions[i]-positions)*0.01/len(positions)
+	# Fly towards the middle	
+	velocities+=diff_pos.sum(axis=1).T*0.01/len(positions)
+	
+	for i in range(len(positions)):		
 		
 		# Fly away from nearby boids	
 		nearby_push = ((positions[i]-positions)**2).sum(axis=1)<100

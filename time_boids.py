@@ -9,7 +9,7 @@ def time_bad_boids():
 	for x in xrange(100):
 		bd.update_boids(boids)
 	end_time=time.clock()
-	#duration of update boids averaged 1000 times in micro seconds
+	#duration of update boids averaged 1000 times in milli seconds
 	return (end_time-start_time)*10
 
 def time_object_boids():
@@ -24,7 +24,7 @@ def time_object_boids():
 	for x in xrange(100):
 		boids.update()
 	end_time=time.clock()
-	#duration of update boids averaged 1000 times in micro seconds
+	#duration of update boids averaged 1000 times in milli seconds
 	return (end_time-start_time)*10
 
 def time_numpy_boids():
@@ -33,7 +33,7 @@ def time_numpy_boids():
 	for x in xrange(100):
 		nbd.update_boids(boids)
 	end_time=time.clock()
-	#duration of update boids averaged 1000 times in micro seconds
+	#duration of update boids averaged 1000 times in milli seconds
 	return (end_time-start_time)*10
 	
 print 'numpy:', time_numpy_boids(), 'original:', time_bad_boids()
